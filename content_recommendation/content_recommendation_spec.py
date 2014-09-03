@@ -3,7 +3,7 @@ import os
 from tempfile import NamedTemporaryFile
 from should_dsl import should
 
-from content_recommendation import load_ratings
+from content_recommendation import load_ratings, normalize_data
 
 def generate_temporary_file(data):
     temp_file = NamedTemporaryFile(delete=False)
@@ -29,3 +29,13 @@ class ContentRecommendationTest(unittest.TestCase):
         users |should| equal_to({'1', '2', '3', '12'})
         movies |should| equal_to({'1193', '1357', '3421'})
         ratings |should| equal_to({('1','1193'): 5, ('2', '1357'): 5, ('3', '3421'): 4, ('12', '1193'): 4})
+
+    def it_should_normaliza_the_ratings(self):
+        users = {'1', '2', '3', '12'}
+        movies = {'1193', '1357', '3421'}
+        ratings = {('1','1193'): 5, ('2', '1357'): 5, ('3', '3421'): 4, ('12', '1193'): 4}
+        normalized_ratings = normalize_data(users, movies, ratings)
+        normalized_ratings |should| equal_to({('1', '1193'): round(10.0/3, 3), \
+                                              ('2', '1357'): round(10.0/3, 3), \
+                                              ('3', '3421'): round(8.0/3, 3), \
+                                              ('12', '1193'): round(8.0/3, 3)})
