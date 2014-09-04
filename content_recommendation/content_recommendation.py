@@ -23,6 +23,7 @@ class Similar(object):
         self.movies = set()
         self.ratings = {}
         self.utility_matrix = {}
+        self.average_rate_by_user = {}
 
     def load_ratings(self, file_name):
         for line in load_from_file(file_name):
@@ -41,7 +42,9 @@ class Similar(object):
                 scores[u_id] += 0
         for key, value in self.ratings.iteritems():
             user_id, _ = key
-            self.utility_matrix[key] = round(value - (float(scores[user_id])/len(self.movies)), 3)
+            avg = (float(scores[user_id])/len(self.movies))
+            self.utility_matrix[key] = round(value - avg, 3)
+            self.average_rate_by_user[user_id] = avg
 
     def _get_ratings(self, user_id):
         user_ratings = []
@@ -68,6 +71,12 @@ class Similar(object):
                 more_similars.add(i)
         return list(more_similars)
 
+    def calculate_average_rating(self, users):
+        total = 0
+        for i in users:
+            total += self.average_rate_by_user[i]
+        return float(total)/len(users)
+
 
 if __name__ == '__main__':
     from datetime import datetime
@@ -79,5 +88,7 @@ if __name__ == '__main__':
     similar.normalize_data()
     print '>>Done initial processing in ', datetime.now()-startTime
     print 'Calculating similarities...'
-    print similar.get_k_more_similar_users(3)
-    print 'Finished in ', datetime.now()-startTime
+    more_similar_users = similar.get_k_more_similar_users(3)
+    avg = similar.calculate_average_rating(more_similar_users)
+    print 'Average rating for the %i most similar users: %.5f' %(len(more_similar_users), avg)
+    print '>>Finished running in ', datetime.now()-startTime
