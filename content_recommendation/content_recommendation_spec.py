@@ -64,6 +64,12 @@ class ContentRecommendationTest(unittest.TestCase):
         result = self.similar._get_ratings('12')
         result |should| equal_to([round(8.0/3, 3), 0, 0])
 
+    def it_should_keep_track_of_users_average_rate(self):
+        self.similar.average_rate_by_user |should| equal_to({'1': round(5.0/3, 3), \
+                                                             '2': round(5.0/3, 3), \
+                                                             '3': round(4.0/3, 3), \
+                                                             '12': round(4.0/3, 3)})
+
 
     def it_should_return_the_k_more_similar_users(self):
         similar_users = self.similar.get_k_more_similar_users(2)

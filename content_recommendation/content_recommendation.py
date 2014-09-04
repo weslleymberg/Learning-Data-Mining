@@ -44,7 +44,7 @@ class Similar(object):
             user_id, _ = key
             avg = (float(scores[user_id])/len(self.movies))
             self.utility_matrix[key] = round(value - avg, 3)
-            self.average_rate_by_user[user_id] = avg
+            self.average_rate_by_user[user_id] = round(avg, 3)
 
     def _get_ratings(self, user_id):
         user_ratings = []
