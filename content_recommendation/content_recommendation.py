@@ -67,3 +67,17 @@ class Similar(object):
                     break
                 more_similars.add(i)
         return list(more_similars)
+
+
+if __name__ == '__main__':
+    from datetime import datetime
+    startTime = datetime.now()
+    similar = Similar()
+    print 'Loading data from file...'
+    similar.load_ratings('ratings_sample.dat')
+    print 'Normalazing data...'
+    similar.normalize_data()
+    print '>>Done initial processing in ', datetime.now()-startTime
+    print 'Calculating similarities...'
+    print similar.get_k_more_similar_users(3)
+    print 'Finished in ', datetime.now()-startTime
