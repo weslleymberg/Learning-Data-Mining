@@ -134,13 +134,16 @@ if __name__ == '__main__':
 
     print 'Calculating users similarities...'
     more_similar_users = similar.get_k_more_similar_users(3)
-    avg = similar.calculate_average_rating(more_similar_users)
+    u_avg = similar.calculate_average_rating(more_similar_users)
     print 'Average rating for the %i most similar users: %.5f' %(len(more_similar_users), avg)
     print '>>Finished in: ', datetime.now()-startTime
     print "================================================="
 
     print 'Calculating movies similarities...'
     more_similar_movies = similar.get_k_more_similar_movies(3)
-    avg = similar.calculate_average_rating(more_similar_movies, movie=True)
+    m_avg = similar.calculate_average_rating(more_similar_movies, movie=True)
     print 'Average rating for the %i most similar movies: %.5f' %(len(more_similar_movies), avg)
     print '>>Finished in: ', datetime.now()-startTime
+
+    print "================================================="
+    print "Total average: ", (u_avg+m_avg)/2
