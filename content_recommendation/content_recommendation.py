@@ -54,15 +54,15 @@ class Similar(object):
         return user_ratings
 
     def get_k_more_similar_users(self, k):
-        similars = {}
+        similars = []
         more_similars = set()
         for a, b in combinations(self.users, 2):
             ratings_a = self._get_ratings(a)
             ratings_b = self._get_ratings(b)
-            similars[(a, b)] = sim(ratings_a, ratings_b)
-        sorted_similars = sorted(similars.iteritems(), key=lambda x: x[1], reverse=True)
-        for key, _ in sorted_similars:
-            for i in key:
+            similars.append(((a, b), sim(ratings_a, ratings_b)))
+        sorted_similars = sorted(similars, key=lambda x: x[1], reverse=True)
+        for user_pair, _ in sorted_similars:
+            for i in user_pair:
                 if len(more_similars) == k:
                     break
                 more_similars.add(i)
